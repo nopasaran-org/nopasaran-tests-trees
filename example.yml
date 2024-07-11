@@ -1,4 +1,5 @@
-Campaign:
+scenarios_repository: "https://github.com/BenIlies/NoPASARAN-scenarios"
+campaign:
   test-case: "TestCase1"
   Superior:
     test-case: "TestCase2"
