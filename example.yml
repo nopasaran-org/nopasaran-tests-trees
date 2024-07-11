@@ -1,8 +1,8 @@
 scenarios_repository: "https://github.com/BenIlies/NoPASARAN-scenarios"
 campaign:
-  test-case: "TestCase1"
+  test-case: "Basic_Guarding"
   Superior:
-    test-case: "TestCase2"
+    test-case: "Basic_Guarding"
     Superior:
       result: "ClassA"
     Equal:
@@ -12,7 +12,7 @@ campaign:
   Equal:
     result: "ClassD"
   Inferior:
-    test-case: "TestCase3"
+    test-case: "Basic_Guarding"
     Superior:
       result: "ClassE"
     Equal:
