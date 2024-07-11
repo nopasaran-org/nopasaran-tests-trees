@@ -1,0 +1,19 @@
+Campaign:
+  test-case: "TestCase1"
+  Superior:
+    test-case: "TestCase2"
+    Superior:
+      result: "ClassA"
+    Equal:
+      result: "ClassB"
+    Inferior:
+      result: "ClassC"
+  Equal:
+    result: "ClassD"
+  Inferior:
+    test-case: "TestCase3"
+    Superior:
+      result: "ClassE"
+    Equal:
+      result: "ClassF"
+    Inferior:
