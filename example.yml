@@ -17,3 +17,4 @@ Campaign:
     Equal:
       result: "ClassF"
     Inferior:
+      result: "ClassG"
