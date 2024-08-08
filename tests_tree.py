@@ -257,7 +257,7 @@ class TestsTree:
 class TestsTreeTest:
     @staticmethod
     def save_tree():
-        root = TestsTreeNode('Root', inputs=['endpoint_1', 'endpoint_2'], outputs=['Z'], test='Example')
+        root = TestsTreeNode('Root', inputs=['endpoint_1', 'endpoint_2'], outputs=['Z'], test='HTTP_Exchange')
 
         child1_default_inputs = {'U': 5}
         child1 = TestsTreeNode('Child 1', inputs=['U'], outputs=['V'], test='Example', default_input_values=child1_default_inputs)
