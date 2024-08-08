@@ -15,11 +15,47 @@ class TestsTreeNode:
     def add_child(self, child, conditions):
         self.children.append((child, conditions))
 
-
-
     def evaluate_test(self, endpoints, repository, input_values):
-        result = [str(random.randint(1, 20)) for _ in self.outputs]  # Dummy evaluation for the example
-        return result
+        def evaluate_endpoint(inputs, endpoint, result_container, is_first_thread):
+            # Here you can place your actual evaluation logic
+            # For now, just print the inputs and simulate some computation
+            result = [str(random.randint(1, 20)) for _ in self.outputs]
+            
+            # Store the result if this is the first thread
+            if is_first_thread:
+                result_container['result'] = result
+        
+        try:            
+            # Iterate over the input values and populate the endpoint dictionaries
+            for key, value in input_values.items():
+                if key == 'endpoint_1':
+                    inputs_endpoint1 = value
+                elif key == 'endpoint_2':
+                    inputs_endpoint2 = value
+            
+            # Shared container for storing the result of the first thread
+            result_container = {}
+
+            return [str(random.randint(1, 20)) for _ in self.outputs] # Dummy evaluation for the example
+        
+            # Create threads for each endpoint evaluation
+            thread1 = threading.Thread(target=evaluate_endpoint, args=(inputs_endpoint1, endpoints[0], result_container, True))
+            thread2 = threading.Thread(target=evaluate_endpoint, args=(inputs_endpoint2, endpoints[1], result_container, False))
+            
+            # Start the threads
+            thread1.start()
+            thread2.start()
+            
+            # Wait for both threads to complete
+            thread1.join()
+            thread2.join()
+            
+            # Return the result of the first thread
+            return result_container.get('result', [])
+            
+        except AttributeError:
+            print(f"Unknown test '{self.test}' for node {self.name}")
+            return []
         
 class TestsTree:
     def __init__(self, repository=None, endpoints=None):
@@ -62,8 +98,6 @@ class TestsTree:
     def from_dot(self, dot_string):
         graph = pydot.graph_from_dot_data(dot_string)[0]
         nodes = {}
-
-        # Extract repository from graph label
         repository_label = graph.get_label()
         if repository_label:
             self.repository = repository_label.replace('Repository: ', '').strip()
@@ -74,17 +108,17 @@ class TestsTree:
             outputs = []
             test = None
             default_input_values = {}
-
-            # Parse the label to extract inputs, outputs, and test
-            label = node.get_attributes()['label'].strip('"')
-            label_parts = label.split('\\n')
-            main_label = label_parts[0]
+            label = node.get_attributes()['label'].strip('"').replace('\\n', '\n')
+            label_parts = label.split('\n')
 
             for part in label_parts[1:]:
                 if part.startswith('Inputs: ['):
                     inputs_str = part.replace('Inputs: [', '').replace(']', '')
                     inputs = [inp.split('=')[0].strip() for inp in inputs_str.split(',')]
-                    default_input_values = {inp.split('=')[0].strip(): int(inp.split('=')[1].strip()) for inp in inputs_str.split(',') if '=' in inp}
+                    try:
+                        default_input_values = {inp.split('=')[0].strip(): eval("=".join(inp.split('=')[1:]).strip()) for inp in inputs_str.split(',') if '=' in inp}
+                    except SyntaxError as e:
+                        print(f"Error parsing default input values: {e}")
                 elif part.startswith('Outputs: '):
                     outputs_str = part.replace('Outputs: ', '').replace("[", "").replace("]", "")
                     outputs = outputs_str.split(', ')
@@ -223,8 +257,7 @@ class TestsTree:
 class TestsTreeTest:
     @staticmethod
     def save_tree():
-        root_default_inputs = {'X': 100}
-        root = TestsTreeNode('Root', inputs=['X', 'Y'], outputs=['Z'], test='Example', default_input_values=root_default_inputs)
+        root = TestsTreeNode('Root', inputs=['endpoint_1', 'endpoint_2'], outputs=['Z'], test='Example')
 
         child1_default_inputs = {'U': 5}
         child1 = TestsTreeNode('Child 1', inputs=['U'], outputs=['V'], test='Example', default_input_values=child1_default_inputs)
@@ -232,12 +265,12 @@ class TestsTreeTest:
         child2_default_inputs = {'U': 10}
         child2 = TestsTreeNode('Child 2', inputs=['U'], outputs=['V'], test='Example', default_input_values=child2_default_inputs)
 
-        repository = "https://github.com/dummy-repository-url"
+        repository = "https://github.com/BenIlies/NoPASARAN-tests"
 
         tree = TestsTree(repository=repository)
         tree.add_root(root)
-        tree.add_edge(root, child1, ['Z < 10'])
-        tree.add_edge(root, child2, ['Z >= 10'])
+        tree.add_edge(root, child1, ['int(Z) < 10'])
+        tree.add_edge(root, child2, ['int(Z) >= 10'])
 
         png_filename = 'tests_tree.png'
         tree.save_png_with_metadata(png_filename)
@@ -249,12 +282,19 @@ class TestsTreeTest:
         png_filename = 'tests_tree.png'
         tree.load_from_png(png_filename)
 
-        print(tree.repository)
-
         node_inputs = {
-            'A': {'X': 10, 'Y': 6},
-            'B': {'Z': 7},
-            'C': {'Z': 15}
+            'Root': {'endpoint_1': 
+                        {
+                            "port": 15, "array": [100, 200]
+                        }, 
+                     'endpoint_2': 
+                        {
+                            "array": [12, 200]
+                        }
+                    }
+                     ,
+            'Child 1': {'Z': 7},
+            'Child 2': {'Z': 15}
         }
 
         final_output = tree.evaluate_tree(node_inputs)
