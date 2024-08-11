@@ -280,21 +280,21 @@ class TestsTreeTest:
         root = TestsTreeNode(
             'Root', 
             num_workers=2, 
-            inputs=[{'val_1': (None, False), 'val_5': (3, True)}, {'val_2': (5, True)}],
+            inputs=[{'role': (None, False)}, {'role': (None, False)}],
             test='HTTP_Exchange'
         )
 
         child1 = TestsTreeNode(
             'Child 1', 
             num_workers=2, 
-            inputs=[{'val_3': (None, False)}, {}],
+            inputs=[{'role': (None, False)}, {'role': (None, False)}],
             test='HTTP_Exchange'
         )
 
         child2 = TestsTreeNode(
             'Child 2', 
             num_workers=2, 
-            inputs=[{}, {'val_4': (10, True)}],
+            inputs=[{'role': (None, False)}, {'role': (None, False)}],
             test='HTTP_Exchange'
         )
 
@@ -317,9 +317,9 @@ class TestsTreeTest:
 
         # Set inputs for all nodes
         node_inputs = {
-            'Root': {'Worker_1': {'val_1': 5}},
-            'Child 1': {'Worker_1': {'val_3': b"val_3"}},
-            'Child 2': {'Worker_2': {'val_4': 10}}
+            'Root': {'Worker_1': {'role': "client"}},
+            'Child 1': {'Worker_1': {'role': "client"}},
+            'Child 2': {'Worker_2': {'role': "client"}}
         }
 
         try:
