@@ -298,7 +298,7 @@ class TestsTreeTest:
             test='HTTP_Exchange'
         )
 
-        repository = "https://github.com/BenIlies/NoPASARAN-tests"
+        repository = "https://github.com/nopasaran-org/nopasaran-tests"
 
         tree = TestsTree(repository=repository)
         tree.add_root(root)
