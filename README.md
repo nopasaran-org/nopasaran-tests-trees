@@ -13,9 +13,9 @@ This repository contains a Python framework for creating, saving, loading, and e
 
 Before using the framework, make sure you have Python installed. You can then install the required packages by running:
 
-\```bash
+```bash
 pip install -r requirements.txt
-\```
+```
 
 ## How to Create and Evaluate a Test Tree
 
@@ -25,7 +25,7 @@ The following steps show how to create a decision tree, save it as a PNG file, l
 
 The first step is to create the structure of the decision tree. Below is an example of how to create a simple tree with a root node and two child nodes. Each node can have multiple workers, and the inputs required by each worker can be specified.
 
-\```python
+```python
 from tests_tree import TestsTreeNode, TestsTree
 
 class TestsTreeTest:
@@ -68,13 +68,13 @@ test='HTTP_Exchange'
         print(f"Tests tree image saved as '{png_filename}'.")
 
 TestsTreeTest.save_tree()
-\```
+```
 
 ### 2. Load and Evaluate the Test Tree
 
 Once the decision tree is saved, you can load it from the PNG file and evaluate it by providing inputs for each node. The evaluation process will navigate through the tree based on the conditions and produce a final output.
 
-\```python
+```python
 class TestsTreeTest:
 @staticmethod
 def load_and_evaluate_tree():
@@ -97,7 +97,7 @@ tree.load_from_png(png_filename)
             print(f"Error during evaluation: {e}")
 
 TestsTreeTest.load_and_evaluate_tree()
-\```
+```
 
 ### Explanation of Variables
 
