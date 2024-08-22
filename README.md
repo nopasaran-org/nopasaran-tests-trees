@@ -111,6 +111,6 @@ TestsTreeTest.load_and_evaluate_tree()
 
 After running the above code, the decision tree structure will be saved as a PNG file (`tests_tree.png`). The image includes the tree structure and metadata. The following example tree is generated:
 
-![Test Tree Structure](seq_numbers.png)
+![Test Tree Structure](tests_tree.png)
 
 The tree is then loaded, and based on the input provided, the conditions are evaluated to determine which path the tree should follow. The final output is displayed in the console.
