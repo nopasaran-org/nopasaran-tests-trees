@@ -25,6 +25,8 @@ The following steps show how to create a decision tree, save it as a PNG file, l
 
 The first step is to create the structure of the decision tree. Below is an example of how to create a simple tree with a root node and two child nodes. Each node can have multiple workers, and the inputs required by each worker can be specified.
 
+In this example, the `repository` parameter is specified to point to the URL of the repository where the actual test representations are stored and fetched by nopasaran workers. The `test` parameter corresponds to the name of the nopasaran test in this repository.
+
 ```python
 from tests_tree import TestsTreeNode, TestsTree
 
