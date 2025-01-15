@@ -280,31 +280,30 @@ class TestsTreeTest:
         root = TestsTreeNode(
             'Root', 
             num_workers=2, 
-            inputs=[{'role': (None, False), 'client': (None, False), 'server': (None, False), 'host': (None, False), 'port': (None, False), 'client_frames': (None, False), 'tls_enabled': (None, False), 'protocol': (None, False), 'connection_settings_client': (None, False)}, 
-                    {'role': (None, False), 'client': (None, False), 'server': (None, False), 'host': (None, False), 'port': (None, False), 'server_frames': (None, False), 'tls_enabled': (None, False), 'protocol': (None, False), 'connection_settings_server': (None, False)}],
-            test='HTTP_2_CONFORMANCE'
+            inputs=[{'role': (None, False)}, {'role': (None, False)}],
+            test='HTTP_Exchange'
         )
 
-        # child1 = TestsTreeNode(
-        #     'Child 1', 
-        #     num_workers=2, 
-        #     inputs=[{'role': (None, False)}, {'role': (None, False)}],
-        #     test='HTTP_Exchange'
-        # )
+        child1 = TestsTreeNode(
+            'Child 1', 
+            num_workers=2, 
+            inputs=[{'role': (None, False)}, {'role': (None, False)}],
+            test='HTTP_Exchange'
+        )
 
-        # child2 = TestsTreeNode(
-        #     'Child 2', 
-        #     num_workers=2, 
-        #     inputs=[{'role': (None, False)}, {'role': (None, False)}],
-        #     test='HTTP_Exchange'
-        # )
+        child2 = TestsTreeNode(
+            'Child 2', 
+            num_workers=2, 
+            inputs=[{'role': (None, False)}, {'role': (None, False)}],
+            test='HTTP_Exchange'
+        )
 
         repository = "https://github.com/nopasaran-org/nopasaran-tests"
 
         tree = TestsTree(repository=repository)
         tree.add_root(root)
-        # tree.add_edge(root, child1, ['output_values["worker_1"]["Variables"]["ctrl"] == "PASS"'])
-        # tree.add_edge(root, child2, ['output_values["worker_2"]["Variables"]["ctrl"] == "PASS"'])
+        tree.add_edge(root, child1, ['output_values["worker_1"]["Variables"]["ctrl"] == "PASS"'])
+        tree.add_edge(root, child2, ['output_values["worker_2"]["Variables"]["ctrl"] == "PASS"'])
 
         png_filename = 'tests_tree.png'
         tree.save_png_with_metadata(png_filename)
